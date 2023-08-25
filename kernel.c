@@ -5,6 +5,12 @@ typedef unsigned char uint8_t;
 typedef unsigned int uint32_t;
 typedef uint32_t size_t;
 
+#define PANIC(fmt, ...)\
+    do{ \
+        printf("PANIC: %s:%d: " fmt, __FILE__, __LINE__, ##__VA_ARGS__); \
+        while(1); \
+    }while(0); \
+
 extern char __bss[], __bss_end[], __stack_top[];
 
 struct sbiret sbi_call(long arg0, long arg1, long arg2, long arg3, long arg4,
@@ -37,7 +43,9 @@ void kernel_main(void){
 
     memset(__bss, 0, (size_t) __bss_end - (size_t) __bss);
 
-    for(;;);
+    PANIC("BOOTED!\n");
+    printf("Unreachable here\n");
+
 }
 
 __attribute__((section(".text.boot")))
